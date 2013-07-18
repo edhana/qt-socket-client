@@ -36,8 +36,6 @@ void Client::connectionClosed(){
 }
 
 void Client::readDataFromServer(){
-  qDebug() << "ENCRYPTED CONNECTION STARTED";
-
   while(socket->waitForReadyRead()){
       qDebug() << "READED DATA: " << socket->readAll().data();
   }
@@ -66,10 +64,7 @@ void Client::socketError(const QList<QSslError> &errors){
     qDebug() << "[DEBUG] Date: " << server_certificate.effectiveDate().toString();
     qDebug() << "[DEBUG] Expire: " << server_certificate.expiryDate().toString();
 
-    if(socket->isEncrypted()){
-        // TODO: Remover esse codigo daqui
-        qDebug() << "Data readed from server: " << socket->readAll().data();
-    }else{
+    if(!socket->isEncrypted()){
         qDebug() << "[ERROR] Encrypted connection was not initialized.";
     }
 }
