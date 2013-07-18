@@ -3,15 +3,22 @@
 
 #include <QObject>
 #include <QSslSocket>
+#include <QSslError>
+#include <QList>
 
 class Client : public QObject
 {
   Q_OBJECT
+
 public:
   Client();
+  ~Client();
   void sockConnect();
+
 private slots:
-  void waitForGreeting();
+  void connectionConfig();
+  void readDataFromServer();
+  void socketError(const QList<QSslError> &errors);
 
 private:
   QSslSocket *socket;

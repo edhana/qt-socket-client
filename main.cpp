@@ -1,24 +1,10 @@
 #include <QCoreApplication>
 #include <QSslSocket>
 #include <QDebug>
+#include <QSslError>
+#include <QList>
 
 #include "client.h"
-
-Client::Client(){
-  socket = new QSslSocket();
-  connect(socket, SIGNAL(connected()), SLOT(waitForGreeting()));
-}
-
-void Client::waitForGreeting(){
-  qDebug() << "Que momento emocionante, conectou!!\n";
-}
-
-void Client::sockConnect(){
-  socket->connectToHost("localhost", 443);
-
-  while(!socket->waitForConnected())
-    qDebug() << "Ainda nao conectou!!!";
-}
 
 int main( int argc, char **argv )
 {
@@ -29,5 +15,5 @@ int main( int argc, char **argv )
 
     qDebug() << "Done";
 
-    return 0;
+    return app.exec();
 }
