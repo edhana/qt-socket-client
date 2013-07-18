@@ -18,6 +18,7 @@ public:
 private slots:
   void connectionConfig();
   void readDataFromServer();
+  void connectionClosed();
   void socketError(const QList<QSslError> &errors);
 
 private:
