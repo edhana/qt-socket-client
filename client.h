@@ -20,6 +20,7 @@ private slots:
   void readDataFromServer();
   void connectionClosed();
   void socketError(const QList<QSslError> &errors);
+  void connectionError(const QAbstractSocket::SocketError &error);
 
 private:
   QSslSocket *socket;

@@ -13,6 +13,7 @@ Client::Client(){
   connect(socket, SIGNAL(encrypted()), SLOT(readDataFromServer()));
   connect(socket, SIGNAL(disconnected()), SLOT(connectionClosed()));
   connect(socket, SIGNAL(sslErrors(QList<QSslError>)), SLOT(socketError(QList<QSslError>)));
+  connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(connectionError(QAbstractSocket::SocketError)));
 }
 
 Client::~Client(){
@@ -33,6 +34,7 @@ void Client::connectionConfig(){
 
 void Client::connectionClosed(){
     qDebug() << "The connection with server was closed";
+    QCoreApplication::quit();
 }
 
 void Client::readDataFromServer(){
@@ -69,6 +71,20 @@ void Client::socketError(const QList<QSslError> &errors){
     }
 }
 
+void Client::connectionError(const QAbstractSocket::SocketError &error){
+    if(error == QAbstractSocket::ConnectionRefusedError){
+        qDebug() << "[ERROR] The connection was refused by the server";
+    }else if(error == QAbstractSocket::SslHandshakeFailedError){
+        qDebug() << "[ERROR] It was not possible to finish the SSL Handshake";
+    }else{
+        qDebug() << "[ERROR] A connection error has been found: " << error;
+    }
+}
+
 void Client::sockConnect(){
   socket->connectToHost("localhost", 443);
+//    socket->connectToHost("ubuntu", 443);
+    if(!socket->waitForConnected()){
+        qDebug() << "[ERROR] Could not estabilish connection with server.";
+    }
 }
